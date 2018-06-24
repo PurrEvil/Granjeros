@@ -65,7 +65,8 @@ void AdministradorDeCatalogoDestinos::cargarStringADestino(std::string getLinea)
 	std::string cultivo=vectorDeStrings[3];
 
 	Arribo* arribo  = new Arribo(puntoLlegada, costo, cultivo);
-
+	
+	// nuevo metodo
 	if(!destinos->estaVacia()){
 		destinos->iniciarCursor();
 		while(destinos->avanzarCursor() && !encontro){
