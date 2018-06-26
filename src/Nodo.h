@@ -1,8 +1,8 @@
 /*
  * Nodo.h
  *
- *  Created on: 12 may. 2018
- *      Author: daniela
+ *  Created on: 25 jun. 2018
+ *      Author: purrevil
  */
 
 #ifndef NODO_H_
@@ -10,74 +10,85 @@
 
 #ifndef NULL
 #define NULL 0
-#ifndef NULL
-#define INF 99999999999
 #endif
 
-template<class T> class Nodo {
+#ifndef INF
+#define INF 999
+#endif
 
-    private:
+template<class T> class Nodo{
+private:
+	Nodo<T>* siguiente;
+	T dato;
+	unsigned int prioridad;
 
-        T dato;
-        int prioridad;
 
-        Nodo<T>* siguiente;
+public:
+    /*
+     * post: el Nodo resulta inicializado con el dato dado
+     *       sin un Nodo siguiente y con la mayor prioridad.
+     */
 
-    public:
+	Nodo(T dato){
 
-        /*
-         * post: el Nodo resulta inicializado con el dato dado
-         *       y sin un Nodo siguiente.
-         */
-        Nodo(T dato) {
+		this->siguiente = NULL;
+		this->dato = dato;
+		this->prioridad = INF;
+	}
 
-            this->dato = dato;
-            this->prioridad = INF;
-            this->siguiente = NULL;
-        }
-        Nodo(int prioridad,T dato){
-        	this->dato = dato;
-        	this->prioridad = prioridad;
-        	this->siguiente = NULL;
-        }
+    /*
+     * post: el Nodo resulta inicializado con el dato dado
+     *       sin un Nodo siguiente y con la prioridad dada.
+     */
+	Nodo (unsigned int prioridad, T dato){
 
-        /*
-         * post: devuelve el valor del dato.
-         */
-        T obtenerDato() {
+		this->siguiente = NULL;
+		this->dato = dato;
+		this->prioridad = prioridad;
+	}
 
-            return this->dato;
-        }
 
-        /*
-         * post: cambia el valor del dato.
-         */
-        void cambiarDato(T nuevoDato) {
+    /*
+     * post: devuelve el siguiente Nodo.
+     */
 
-            this->dato = nuevoDato;
-        }
+	Nodo<T>* obtenerSiguiente(){
+		return this->siguiente;
+	}
 
-        /*
-         * post: devuelve el siguiente Nodo.
-         */
-        Nodo<T>* obtenerSiguiente() {
+    /*
+     * post: devuelve el valor del dato.
+     */
 
-            return this->siguiente;
-        }
+	T obtenerDato(){
+		return this->dato;
+	}
 
-        /*
-         * post: cambia el siguiente Nodo por nuevoSiguiente.
-         */
-        void cambiarSiguiente(Nodo<T>* nuevoSiguiente) {
+    /*
+     * post: cambia el valor del dato.
+     */
+	void cambiarDato(T nuevoDato){
+		this->dato = nuevoDato;
+	}
 
-            this->siguiente = nuevoSiguiente;
-        }
-        int obtenerPrioridad(){
-        	return this->prioridad;
-        }
+    /*
+     * post: cambia el siguiente Nodo por nuevoSiguiente.
+     */
+	void cambiarSiguiente(Nodo<T>* nuevoSiguiente){
+		this->siguiente = nuevoSiguiente;
+	};
+	/*
+	 * post: devuelve la prioridad
+	 */
+	unsigned int obtenerPrioridad(){
+		return this->prioridad;
+	}
+
+	/*
+	 * post: cambia la prioridad por la nuevaPrioridad.
+	 */
+	void cambiarPrioridad(unsigned int nuevaPrioridad){
+		this->prioridad = nuevaPrioridad;
+	}
 };
-
-
-
-
 #endif /* NODO_H_ */

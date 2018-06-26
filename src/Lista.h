@@ -124,6 +124,13 @@ template<class T> class Lista {
          */
         T obtenerCursor();
 
+
+        void acolar(unsigned int prioridad, T dato);
+
+        T desacolar();
+
+        T obtenerFrente();
+
         /*
          * post: libera los recursos asociados a la Lista.
          */
@@ -182,6 +189,42 @@ template<class T> Lista<T>::Lista(Lista<T>& otraLista) {
     /* copia los elementos de otraLista */
     this->agregar(otraLista);
 }
+
+template <class T> T Lista<T>::obtenerFrente(){
+	return this->primero;
+}
+
+template<class T> void Lista<T>::acolar(unsigned int prioridad, T dato){
+	Nodo<T>* nuevoNodo = new Nodo<T>(prioridad, dato);
+	bool intercambio = false;
+	if(estaVacia()){
+		this->primero = nuevoNodo;
+
+	}
+	else if(this->primero->obtenerPrioridad()>prioridad){
+		nuevoNodo->cambiarSiguiente(this->primero);
+		this->primero = nuevoNodo;
+	}
+	else if(this->obtenerNodo(this->tamanio)->obtenerPrioridad() <= prioridad){
+		this->obtenerNodo(this->tamanio)->cambiarSiguiente(nuevoNodo);
+	}
+	else{
+		Nodo<T> * nodoActual = this->primero;
+		while(nodoActual->obtenerSiguiente() != NULL && !intercambio){
+			if((nodoActual->obtenerPrioridad() < prioridad) && (nodoActual->obtenerSiguiente()->obtenerPrioridad()> prioridad)){
+				nuevoNodo->cambiarSiguiente(nodoActual->obtenerSiguiente());
+				nodoActual->cambiarSiguiente(nuevoNodo);
+				intercambio = true;
+			}
+			else{
+				nodoActual = nodoActual->obtenerSiguiente();
+			}
+		}
+	}
+	this->tamanio++;
+
+}
+
 
 template<class T> bool Lista<T>::estaVacia() {
 

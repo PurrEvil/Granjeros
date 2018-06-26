@@ -8,7 +8,7 @@
 #ifndef ADMINISTRADORDECATALOGODEDESTINOS_H_
 #define ADMINISTRADORDECATALOGODEDESTINOS_H_
 
-#include "Destino.h"
+
 #include "Lista.h"
 #include "Traductor.h"
 #include "Viaje.h"
