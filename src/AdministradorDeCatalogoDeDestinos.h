@@ -19,6 +19,7 @@ class AdministradorDeCatalogoDestinos{
 
 		Lista<Viaje*>* destinos;
 
+		void completarCatalogo(Lista<Viaje*>* destinos);
 
 	public:
 

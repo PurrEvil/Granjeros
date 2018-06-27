@@ -20,22 +20,54 @@ private:
 	Nodo<T>* obtenerNodo(unsigned int posicion);
 	void asignar(T elemento, unsigned int posicion, unsigned int prioridad);
 	void intercambiar(unsigned int posicionPadre, unsigned int posicionHijo);
+	void bajar(unsigned int posicionPadre);
+
+	void subir(unsigned int posicionHijo);
+
 
 public:
 	Cola();
-	void acolar(unsigned int prioridad, T dato);
+	void acolar(unsigned int* prioridad, T dato);
 	T desacolar();
 	bool estaVacia();
 	T obtenerFrente();
 	unsigned int obtenerPosicion(T dato);
-	void bajar(unsigned int posicionPadre);
 	T obtenerDato(unsigned int posicion);
 	T quitarRaiz();
+
+	void promover(T dato);
 	unsigned int obtenerTamanio();
 
 
 	~Cola();
 };
+template <class T> void Cola<T>::subir(unsigned int posicionHijo){
+	bool termino = false;
+	unsigned int posicionPadre = posicionHijo/2;
+	while(posicionHijo!= 1 && !termino){
+		if((*this->obtenerNodo(posicionHijo)->obtenerPrioridad()) <
+				(*this->obtenerNodo(posicionPadre)->obtenerPrioridad())){
+			this->intercambiar(posicionPadre, posicionHijo);
+			posicionHijo = posicionPadre;
+			posicionPadre = posicionHijo/2;
+		}
+		else{
+			termino = true;
+		}
+	}
+}
+template <class T> void Cola<T>::promover(T dato){
+	unsigned int posicion = 1;
+	bool encontro = false;
+	while(!encontro && posicion<=this->tamanio){
+		Nodo<T>* nodoActual = obtenerNodo(posicion);
+		if(nodoActual->obtenerDato()== dato){
+			this->subir(posicion);
+			encontro = true;
+		}
+		posicion++;
+	}
+}
 
 template <class T> unsigned int Cola<T>::obtenerTamanio(){
 	return this->tamanio;
@@ -44,14 +76,16 @@ template <class T> unsigned int Cola<T>::obtenerTamanio(){
 template <class T> void Cola<T>::intercambiar(unsigned int posicionPadre, unsigned int posicionHijo){
 
 	T datoPadre = this->obtenerNodo(posicionPadre)->obtenerDato();
-	unsigned int prioridadPadre = this->obtenerNodo(posicionPadre)->obtenerPrioridad();
+	unsigned int* prioridadPadre = this->obtenerNodo(posicionPadre)->obtenerPrioridad();
 	// cambia el dato del padre por el dato del hijo
 	this->obtenerNodo(posicionPadre)->cambiarDato(this->obtenerNodo(posicionHijo)->obtenerDato());
 	//cambia la prioridad del padre por la prioridad del hijo
 	this->obtenerNodo(posicionPadre)->cambiarPrioridad(this->obtenerNodo(posicionHijo)->obtenerPrioridad());
+	// this->obtenerNodo(posicionPadre)->cambiarPrioridad(*this->obtenerNodo(posicionHijo)->obtenerPrioridad());
 
 	this->obtenerNodo(posicionHijo)->cambiarDato(datoPadre);
 	this->obtenerNodo(posicionHijo)->cambiarPrioridad(prioridadPadre);
+	//this->obtenerNodo(posicionHijo)->cambiarPrioridad(prioridadPadre);
 
 
 }
@@ -84,25 +118,25 @@ template <class T> Cola<T>::Cola(){
 	this->ultimo = NULL;
 	this->tamanio = 0;
 }
-template<class T> void Cola<T>::acolar(unsigned int prioridad, T dato){
+template<class T> void Cola<T>::acolar(unsigned int* prioridad, T dato){
 	Nodo<T>* nuevoNodo = new Nodo<T>(prioridad, dato);
 	bool intercambio = false;
 	if(estaVacia()){
 		this->primero = nuevoNodo;
 		this->ultimo = nuevoNodo;
 	}
-	else if(this->primero->obtenerPrioridad()>prioridad){
+	else if((*this->primero->obtenerPrioridad())>(*prioridad)){
 		nuevoNodo->cambiarSiguiente(this->primero);
 		this->primero = nuevoNodo;
 	}
-	else if(this->ultimo->obtenerPrioridad() <= prioridad){
+	else if((*this->ultimo->obtenerPrioridad()) <= (*prioridad)){
 		this->ultimo->cambiarSiguiente(nuevoNodo);
 		this->ultimo = nuevoNodo;
 	}
 	else{
 		Nodo<T> * nodoActual = this->primero;
 		while(nodoActual->obtenerSiguiente() != NULL && !intercambio){
-			if((nodoActual->obtenerPrioridad() < prioridad) && (nodoActual->obtenerSiguiente()->obtenerPrioridad()> prioridad)){
+			if(((*nodoActual->obtenerPrioridad()) < (*prioridad)) && ((*nodoActual->obtenerSiguiente()->obtenerPrioridad())> (*prioridad))){
 				nuevoNodo->cambiarSiguiente(nodoActual->obtenerSiguiente());
 				nodoActual->cambiarSiguiente(nuevoNodo);
 				intercambio = true;
@@ -151,10 +185,10 @@ template<class T> void Cola<T>::bajar(unsigned int posicionPadre){
 	bool termino = false;
 	unsigned int posicionHijoMenor = posicionPadre*2;
 	while(posicionHijoMenor<= this->tamanio && !termino){
-		if(posicionHijoMenor < this->tamanio && obtenerNodo(posicionHijoMenor)->obtenerPrioridad() > obtenerNodo(posicionHijoMenor+1)->obtenerPrioridad()){
+		if(posicionHijoMenor < this->tamanio && (*obtenerNodo(posicionHijoMenor)->obtenerPrioridad()) > (*obtenerNodo(posicionHijoMenor+1)->obtenerPrioridad())){
 			posicionHijoMenor++;
 		}
-		if(obtenerNodo(posicionPadre)->obtenerPrioridad() > obtenerNodo(posicionHijoMenor)->obtenerPrioridad()){
+		if((*obtenerNodo(posicionPadre)->obtenerPrioridad()) > (*obtenerNodo(posicionHijoMenor)->obtenerPrioridad())){
 			this->intercambiar(posicionPadre, posicionHijoMenor);
 			posicionPadre = posicionHijoMenor;
 			posicionHijoMenor = posicionPadre*2;

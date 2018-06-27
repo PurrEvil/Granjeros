@@ -13,14 +13,14 @@
 #endif
 
 #ifndef INF
-#define INF 999
+#define INF 100
 #endif
 
 template<class T> class Nodo{
 private:
 	Nodo<T>* siguiente;
 	T dato;
-	unsigned int prioridad;
+	unsigned int* prioridad;
 
 
 public:
@@ -33,14 +33,14 @@ public:
 
 		this->siguiente = NULL;
 		this->dato = dato;
-		this->prioridad = INF;
+		this->prioridad = NULL;
 	}
 
     /*
      * post: el Nodo resulta inicializado con el dato dado
      *       sin un Nodo siguiente y con la prioridad dada.
      */
-	Nodo (unsigned int prioridad, T dato){
+	Nodo (unsigned int* prioridad, T dato){
 
 		this->siguiente = NULL;
 		this->dato = dato;
@@ -80,14 +80,14 @@ public:
 	/*
 	 * post: devuelve la prioridad
 	 */
-	unsigned int obtenerPrioridad(){
+	unsigned int* obtenerPrioridad(){
 		return this->prioridad;
 	}
 
 	/*
 	 * post: cambia la prioridad por la nuevaPrioridad.
 	 */
-	void cambiarPrioridad(unsigned int nuevaPrioridad){
+	void cambiarPrioridad(unsigned int* nuevaPrioridad){
 		this->prioridad = nuevaPrioridad;
 	}
 };

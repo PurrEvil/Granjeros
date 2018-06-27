@@ -34,6 +34,28 @@ void AdministradorDeCatalogoDestinos::leerArchivo(std::string rutaEntrada) {
 	archivo.close();
 }
 
+void AdministradorDeCatalogoDestinos::completarCatalogo(Lista<Viaje*>* destinos){
+	// HIPOTESIS el origen se encuentra en la primera linea del TXT, es decir ALMACEN.
+
+	Lista<Arribo*>* arribosOrigen = destinos->obtener(1)->obtenerArribos();
+	for(unsigned int posicion = 2; posicion <= destinos->contarElementos(); posicion++){
+		bool encontro = false;
+		arribosOrigen->iniciarCursor();
+		while(arribosOrigen->avanzarCursor() && !encontro){
+			if(destinos->obtener(posicion)->obtenerSalidaDelViaje() == arribosOrigen->obtenerCursor()->obtenerArribo()){
+				encontro = true;
+			}
+		}
+		if(!encontro){
+			Lista<Arribo*>* arribos = destinos->obtener(posicion)->obtenerArribos();
+			arribos->iniciarCursor();
+			while(arribos->avanzarCursor()){
+				arribosOrigen->agregar(new Arribo(destinos->obtener(posicion)->obtenerSalidaDelViaje(),
+						INF, arribos->obtenerCursor()->obtenerCultivo() ));
+			}
+		}
+	}
+}
 void AdministradorDeCatalogoDestinos::cargarStringADestino(std::string getLinea){
 
 	int i=0;
@@ -65,7 +87,7 @@ void AdministradorDeCatalogoDestinos::cargarStringADestino(std::string getLinea)
 	std::string cultivo=vectorDeStrings[3];
 
 	Arribo* arribo  = new Arribo(puntoLlegada, costo, cultivo);
-
+	// HIPOTESIS = en el TXT las salidas se encuentran de manera consecutiva (una debajo de la otra).
 	if(!destinos->estaVacia()){
 		destinos->iniciarCursor();
 		while(destinos->avanzarCursor() && !encontro){
@@ -82,6 +104,8 @@ void AdministradorDeCatalogoDestinos::cargarStringADestino(std::string getLinea)
 	else{
 		this->destinos->agregar(new Viaje(puntoSalida, arribo));
 	}
+
+	this->completarCatalogo(this->destinos);
 
 
 
