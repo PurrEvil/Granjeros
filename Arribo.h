@@ -12,12 +12,12 @@
 class Arribo{
 private:
 	std::string arribo;
-	int costo;
+	unsigned int* costo;
 	std::string cultivo;
 public:
-	Arribo(std::string arribo,int costo, std::string cultivo){
+	Arribo(std::string arribo,unsigned int costo, std::string cultivo){
 		this->arribo = arribo;
-		this->costo = costo;
+		this->costo = new unsigned int(costo);
 		this->cultivo = cultivo;
 
 	}
@@ -28,8 +28,14 @@ public:
 	std::string obtenerCultivo(){
 		return this->cultivo;
 	}
-	int obtenerCosto(){
+	unsigned int* obtenerCosto(){
 		return this->costo;
+	}
+	void cambiarCosto(unsigned int nuevoCosto){
+		*this->costo = nuevoCosto;
+	}
+	~Arribo(){
+		delete this->costo;
 	}
 };
 
